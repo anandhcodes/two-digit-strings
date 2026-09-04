@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+using namespace std;
+ 
+void build(vector<int> &seg, vector<int> &arr, int node, int nl, int nr){
+    if(nl == nr){
+        seg[node] = arr[nl];
+        return;
+    }
+    int mid = (nl+nr)/2;
+    build(seg, arr, 2*node, nl, mid);
+    build(seg, arr, 2*node+1, mid+1, nr);
+    seg[node] = min(seg[2*node], seg[2*node+1]);
+}
+ 
+int find(vector<int> &seg,int node,int nl,int nr,int ql,int qr){
+    if(nl>qr || nr<ql){
+        return INT_MAX;
+    }
+    if(nl>=ql && nr<=qr){
+        return seg[node];
+    }
+    int mid = (nl+nr)/2;
+    int left = find(seg,2*node,nl,mid,ql,qr);
+    int right = find(seg,2*node+1,mid+1,nr,ql,qr);
+    return min(left,right);
+}
+ 
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+ 
+    int n,q;
+    cin>>n>>q;
+    vector<int> arr(n+1);
+    arr[0]=0;
+    for(int i=1;i<=n;i++){
+        cin>>arr[i];
+    }
+    vector<int> seg(4*n, INT_MAX);
+    build(seg, arr, 1, 1, n);
+ 
+    while(q--){
+        int l,r;
+        cin>>l>>r;
+        cout<<find(seg,1,1,n,l,r)<<"\n";
+    }
+}
