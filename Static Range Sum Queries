@@ -1,0 +1,21 @@
+#include <stdio.h>
+int main(){
+    int n=0,x=0;
+    scanf("%d %d",&n,&x);
+    long long arr[n];
+    for(int i=0;i<n;i++){
+        scanf("%lld",&arr[i]);
+    }
+    long long prefix_sum[n+1];
+    prefix_sum[0] = 0;
+    for(int i=1;i<=n;i++){
+        prefix_sum[i] = prefix_sum[i-1] + arr[i-1];
+    }
+    for(int i=0;i<x;i++){
+        int l,r;
+        scanf("%d %d",&l,&r);
+        long long sum = prefix_sum[r] - prefix_sum[l-1];
+        printf("%lld\n",sum);
+    } 
+    return 0;
+}
